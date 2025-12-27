@@ -41,9 +41,6 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-    <Analyzer Include="/home/user/UNITY_PROJECTS/TimerProject/Library/PackageCache/com.unity.collab-proxy@2.11.2/Lib/Editor/PlasticSCM/Unity.Plastic.Antlr3.Runtime.dll" />
-    <Analyzer Include="/home/user/UNITY_PROJECTS/TimerProject/Library/PackageCache/com.unity.collab-proxy@2.11.2/Lib/Editor/PlasticSCM/log4netPlastic.dll" />
-    <Analyzer Include="/home/user/UNITY_PROJECTS/TimerProject/Library/PackageCache/com.unity.collab-proxy@2.11.2/Lib/Editor/PlasticSCM/Unity.Plastic.Newtonsoft.Json.dll" />
     <Analyzer Include="/home/user/Unity/Hub/Editor/2022.3.16f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll" />
     <Analyzer Include="/home/user/Unity/Hub/Editor/2022.3.16f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
@@ -700,50 +697,23 @@
     <Reference Include="mscorlib">
       <HintPath>/home/user/Unity/Hub/Editor/2022.3.16f1/Editor/Data/NetStandard/compat/2.1.0/shims/netfx/mscorlib.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Timeline">
+      <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.TestTools.CodeCoverage.Editor.OpenCover.Mono.Reflection">
+      <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.TestTools.CodeCoverage.Editor.OpenCover.Mono.Reflection.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Sysroot.Linux_x86_64">
       <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.Sysroot.Linux_x86_64.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.EditorCoroutines.Editor">
       <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.EditorCoroutines.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Toolchain.Linux-x86_64">
       <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.Toolchain.Linux-x86_64.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Timeline.Editor">
-      <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.Shared.Editor">
-      <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.VisualScripting.Shared.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualStudio.Editor">
-      <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.VisualStudio.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.UI">
-      <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.Core">
-      <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.VisualScripting.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.Core.Editor">
-      <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.VisualScripting.Core.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Rider.Editor">
-      <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.Flow">
-      <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.VisualScripting.Flow.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.Flow.Editor">
-      <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.VisualScripting.Flow.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Timeline">
-      <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.TestTools.CodeCoverage.Editor.OpenCover.Mono.Reflection">
-      <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.TestTools.CodeCoverage.Editor.OpenCover.Mono.Reflection.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.SettingsProvider.Editor">
       <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.VisualScripting.SettingsProvider.Editor.dll</HintPath>
@@ -766,17 +736,44 @@
     <Reference Include="Unity.VisualScripting.State.Editor">
       <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.VisualScripting.State.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Timeline.Editor">
+      <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.Shared.Editor">
+      <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.VisualScripting.Shared.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.VisualStudio.Editor">
+      <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.VisualStudio.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.VisualScripting.Core">
+      <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.VisualScripting.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.UI">
+      <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.Core.Editor">
+      <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.VisualScripting.Core.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Rider.Editor">
+      <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.State">
       <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.VisualScripting.State.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VSCode.Editor">
       <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.Flow">
+      <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.VisualScripting.Flow.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.Flow.Editor">
+      <HintPath>/home/user/UNITY_PROJECTS/TimerProject/Library/ScriptAssemblies/Unity.VisualScripting.Flow.Editor.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

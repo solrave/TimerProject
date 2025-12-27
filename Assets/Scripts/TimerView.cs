@@ -11,9 +11,8 @@ public class TimerView : MonoBehaviour
     [SerializeField] private Button _resetButton;
     [SerializeField] private Button _stoptButton;
     [SerializeField] private Button _resumeButton;
-    [SerializeField] private Slider _slider;
+    [SerializeField] private Slider _passedTimeView;
     [SerializeField] private RectTransform _elapsedTimeView;
-    [SerializeField] private RectTransform _passedTimeView;
     [SerializeField] private Image _secondVisualPrefab;
     private Timer _timer;
 
