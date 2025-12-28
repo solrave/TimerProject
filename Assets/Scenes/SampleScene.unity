@@ -572,15 +572,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 590824a1adf44c93b23ea2e72efd80c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _elapsedTime: 0
-  _maxTime: 0
+  _elapsedTime: 5
+  _maxTime: 5
   _startButton: {fileID: 1841217562}
   _resetButton: {fileID: 2082836408}
   _stoptButton: {fileID: 535912877}
   _resumeButton: {fileID: 1091126873}
-  _passedTimeView: {fileID: 297278719}
-  _elapsedTimeView: {fileID: 819024751}
-  _secondVisualPrefab: {fileID: 0}
+  _straightTimeProgressView: {fileID: 297278719}
+  _elapsedTimeProgressView: {fileID: 819024751}
+  _secondVisualPrefab: {fileID: 7831867812146692433, guid: 6ec29f6f8d881cd9c92b91782b0fbd40, type: 3}
   _timeDisplay: {fileID: 2068746091}
 --- !u!1 &492921597
 GameObject:

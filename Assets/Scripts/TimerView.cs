@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 public class TimerView : MonoBehaviour
 {
@@ -16,58 +18,114 @@ public class TimerView : MonoBehaviour
     [SerializeField] private RectTransform _elapsedTimeProgressView;
     [SerializeField] private Image _secondVisualPrefab;
     [SerializeField] private TMP_Text _timeDisplay;
-    private Coroutine StraightTimerRoutine;
-    private Coroutine CountdownTimerRoutine;
+    private Queue<Image> _visualisedSeconds = new();
+    private Coroutine _straightTimerRoutine;
+    private Coroutine _countdownTimerRoutine;
     private Timer _timer;
 
     private void Awake()
     {
         _timer = new Timer(_elapsedTime, _maxTime);
-        _timer.PassedTimeReported += DisplayReportedTime;
-        _timer.MaxTimeReached += StopStraightTimer;
-        _timer.ElapsedTimeReached += StopCountdownTimer;
+        _timer.StraightTimeReported += OnStraightTimeReported;
+        _timer.CountdownTimeReported += OnCountdownTimeReported;
+        _timer.MaxTimeReached += OnMaxTimeReached;
+        _timer.ElapsedTimeReached += OnCountdownTimeReached;
+        _straightTimeProgressView.maxValue = _maxTime;
         SubscribeButtons();
     }
 
     private void OnDisable()
     {
         UnsubscribeButtons();
-    }
-    
-    private void DisplayReportedTime(float time)
-    {
-        _timeDisplay.text = time.ToString();
+        ClearSecondsVisualizationList();
     }
 
-    private void StartStraightTimer()
+    private void StartTimer()
     {
-        StraightTimerRoutine = StartCoroutine(_timer.StartStraightTimer());
-        while (StraightTimerRoutine != null)
+        if (_straightTimerRoutine != null || _countdownTimerRoutine != null)
+            return;
+        
+        _straightTimerRoutine = StartCoroutine(_timer.StartCount());
+        StartCountdownTimer();
+    }
+    
+    private void StartCountdownTimer()
+    {
+        for (int i = 0; i < _maxTime; i++)
         {
-            _straightTimeProgressView.value =
-                Mathf.Lerp(_timer.PassedTime, _maxTime, _timer.PassedTime / _maxTime);
+            var secondVisual = Object.Instantiate(_secondVisualPrefab, _elapsedTimeProgressView);
+            _visualisedSeconds.Enqueue(secondVisual);
         }
+
+        _countdownTimerRoutine = StartCoroutine(_timer.StartCountdown());
     }
     
-    private void ResetTimer(){}
-    private void ResumeTimer(){}
-    private void StopTimer(){}
-
-    private void StopStraightTimer(float time)
+    private void ResetTimer()
     {
-        if (StraightTimerRoutine != null)
+        OnMaxTimeReached(_timer.PassedTime);
+        OnCountdownTimeReached(0);
+        OnStraightTimeReported(0f);
+        ClearSecondsVisualizationList();
+        _timer.Reset();
+    }
+    
+    private void OnStraightTimeReported(float passedTime)
+    {
+        _timeDisplay.text = Mathf.FloorToInt(passedTime).ToString();
+        _straightTimeProgressView.value = passedTime;
+    }
+    
+    private void OnCountdownTimeReported(int obj)
+    {
+        var currentSecond = _visualisedSeconds.Dequeue();
+        Destroy(currentSecond.gameObject);
+    }
+    
+    private void OnMaxTimeReached(float time)
+    {
+        if (_straightTimerRoutine != null)
         {
-            StopCoroutine(StraightTimerRoutine);
-            StraightTimerRoutine = null;
+            StopCoroutine(_straightTimerRoutine);
+            _straightTimerRoutine = null;
             Debug.Log($"Straight Timer Stopped at time {time}");
+            ResetTimer();
         }
     }
     
-    private void StopCountdownTimer(float time){}
+    private void OnCountdownTimeReached(int time)
+    {
+        if (_countdownTimerRoutine != null)
+        {
+            StopCoroutine(_countdownTimerRoutine);
+            _countdownTimerRoutine = null;
+            Debug.Log($"Countdown Timer Stopped at time {time}");
+            ResetTimer();
+        }
+    }
+    
+    private void ResumeTimer()
+    {
+        _timer.Resume();
+    }
 
+    private void StopTimer()
+    {
+        _timer.Stop();
+    }
+
+    private void ClearSecondsVisualizationList()
+    {
+        foreach (Image second in _visualisedSeconds)
+        {
+            Destroy(second.gameObject);
+        }
+
+        _visualisedSeconds.Clear();
+    }
+    
     private void SubscribeButtons()
     {
-    _startButton.onClick.AddListener(StartStraightTimer);
+    _startButton.onClick.AddListener(StartTimer);
     _resetButton.onClick.AddListener(ResetTimer);
     _resumeButton.onClick.AddListener(ResumeTimer);
     _stoptButton.onClick.AddListener(StopTimer);
@@ -76,7 +134,7 @@ public class TimerView : MonoBehaviour
 
     private void UnsubscribeButtons()
     {
-        _startButton.onClick.RemoveListener(StartStraightTimer);
+        _startButton.onClick.RemoveListener(StartTimer);
         _resetButton.onClick.RemoveListener(ResetTimer);
         _resumeButton.onClick.RemoveListener(ResumeTimer);
         _stoptButton.onClick.RemoveListener(StopTimer);
