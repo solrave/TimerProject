@@ -1,9 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
-public class StraightTimer : Timer
+public class SimpleTimer : Timer
 {
-    public StraightTimer(float goalTime) : base(goalTime)
+    public SimpleTimer(float goalTime) : base(goalTime)
     {
     }
 
