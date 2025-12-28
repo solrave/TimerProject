@@ -8,8 +8,7 @@ using Object = UnityEngine.Object;
 
 public class TimerView : MonoBehaviour
 {
-    [SerializeField] private float _elapsedTime;
-    [SerializeField] private float _maxTime;
+    [SerializeField] private float _goalTime;
     [SerializeField] private Button _startButton;
     [SerializeField] private Button _resetButton;
     [SerializeField] private Button _stoptButton;
@@ -18,19 +17,26 @@ public class TimerView : MonoBehaviour
     [SerializeField] private RectTransform _elapsedTimeProgressView;
     [SerializeField] private Image _secondVisualPrefab;
     [SerializeField] private TMP_Text _timeDisplay;
+    
     private Queue<Image> _visualisedSeconds = new();
+    
     private Coroutine _straightTimerRoutine;
     private Coroutine _countdownTimerRoutine;
-    private Timer _timer;
+    
+    private Timer _straightTimer;
+    private Timer _countdownTimer;
 
     private void Awake()
     {
-        _timer = new Timer(_elapsedTime, _maxTime);
-        _timer.StraightTimeReported += OnStraightTimeReported;
-        _timer.CountdownTimeReported += OnCountdownTimeReported;
-        _timer.MaxTimeReached += OnMaxTimeReached;
-        _timer.ElapsedTimeReached += OnCountdownTimeReached;
-        _straightTimeProgressView.maxValue = _maxTime;
+        _straightTimer = new StraightTimer(_goalTime);
+        _straightTimer.CurrentTimeReported += OnStraightTimeReported;
+        _straightTimer.GoalTimeReached += OnGoalTimeReached;
+        
+        _countdownTimer = new CountdownTimer(_goalTime);
+        _countdownTimer.CurrentTimeReported += OnCountdownTimeReported;
+        _countdownTimer.GoalTimeReached += OnCountdownGoalTimeReached;
+        
+        _straightTimeProgressView.maxValue = _goalTime;
         SubscribeButtons();
     }
 
@@ -40,48 +46,51 @@ public class TimerView : MonoBehaviour
         ClearSecondsVisualizationList();
     }
 
-    private void StartTimer()
+    private void StartTimers()
     {
         if (_straightTimerRoutine != null || _countdownTimerRoutine != null)
             return;
         
-        _straightTimerRoutine = StartCoroutine(_timer.StartCount());
-        StartCountdownTimer();
+        _straightTimerRoutine = StartCoroutine(_straightTimer.Start());
+        _countdownTimerRoutine = StartCoroutine(_countdownTimer.Start());
     }
     
     private void StartCountdownTimer()
     {
-        for (int i = 0; i < _maxTime; i++)
+        for (int i = 0; i < _goalTime; i++)
         {
             var secondVisual = Object.Instantiate(_secondVisualPrefab, _elapsedTimeProgressView);
             _visualisedSeconds.Enqueue(secondVisual);
         }
 
-        _countdownTimerRoutine = StartCoroutine(_timer.StartCountdown());
+        _countdownTimerRoutine = StartCoroutine(_straightTimer.StartCountdown());
     }
     
     private void ResetTimer()
     {
-        OnMaxTimeReached(_timer.PassedTime);
-        OnCountdownTimeReached(0);
+        OnGoalTimeReached(_straightTimer.CurrentTime);
+        OnCountdownGoalTimeReached(0);
         OnStraightTimeReported(0f);
         ClearSecondsVisualizationList();
-        _timer.Reset();
+        _straightTimer.Reset();
     }
     
-    private void OnStraightTimeReported(float passedTime)
+    private void OnStraightTimeReported(float time)
     {
-        _timeDisplay.text = Mathf.FloorToInt(passedTime).ToString();
-        _straightTimeProgressView.value = passedTime;
+        _timeDisplay.text = Mathf.FloorToInt(time).ToString();
+        _straightTimeProgressView.value = time;
     }
     
-    private void OnCountdownTimeReported(int obj)
+    private void OnCountdownTimeReported(float time)
     {
-        var currentSecond = _visualisedSeconds.Dequeue();
-        Destroy(currentSecond.gameObject);
+        if (_visualisedSeconds != null && _visualisedSeconds.Count > time)
+        {
+            var currentSecond = _visualisedSeconds.Dequeue();
+            Destroy(currentSecond.gameObject);
+        }
     }
     
-    private void OnMaxTimeReached(float time)
+    private void OnGoalTimeReached(int time)
     {
         if (_straightTimerRoutine != null)
         {
@@ -92,7 +101,7 @@ public class TimerView : MonoBehaviour
         }
     }
     
-    private void OnCountdownTimeReached(int time)
+    private void OnCountdownGoalTimeReached(int time)
     {
         if (_countdownTimerRoutine != null)
         {
@@ -105,12 +114,12 @@ public class TimerView : MonoBehaviour
     
     private void ResumeTimer()
     {
-        _timer.Resume();
+        _straightTimer.Resume();
     }
 
     private void StopTimer()
     {
-        _timer.Stop();
+        _straightTimer.Stop();
     }
 
     private void ClearSecondsVisualizationList()
@@ -125,7 +134,7 @@ public class TimerView : MonoBehaviour
     
     private void SubscribeButtons()
     {
-    _startButton.onClick.AddListener(StartTimer);
+    _startButton.onClick.AddListener(StartTimers);
     _resetButton.onClick.AddListener(ResetTimer);
     _resumeButton.onClick.AddListener(ResumeTimer);
     _stoptButton.onClick.AddListener(StopTimer);
@@ -134,7 +143,7 @@ public class TimerView : MonoBehaviour
 
     private void UnsubscribeButtons()
     {
-        _startButton.onClick.RemoveListener(StartTimer);
+        _startButton.onClick.RemoveListener(StartTimers);
         _resetButton.onClick.RemoveListener(ResetTimer);
         _resumeButton.onClick.RemoveListener(ResumeTimer);
         _stoptButton.onClick.RemoveListener(StopTimer);
