@@ -1,52 +1,43 @@
-using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public abstract class Timer : ITimerInstance
+public class Timer : TimeCounter
 {
-    public ITimerInstance ThisTimer { get; }
-    public event Action<float> CurrentTimeReported;
-    public event Action<float> GoalTimeReached;
-    public float CurrentTime => _currentTime;
-    
-    protected float _goalTime;
-    protected float _currentTime = 0f;
-    
-    protected bool _timerStopped;
-
-    protected Timer(float goalTime)
+    private float _currentSecond;
+    private float _lastSecond;
+    public Timer(TimeView view) : base(view)
     {
-        _goalTime = goalTime;
-        ThisTimer = this;
+        _currentTime = _goalTime;
     }
 
-    public abstract IEnumerator Start();
-
-    public abstract void Reset();
-
-    public void Stop()
-    {
-        _timerStopped = true;
-    }
-
-    public void Resume()
+    public override IEnumerator Start()
     {
         _timerStopped = false;
-    }
-
-    protected virtual void OnCurrentTimeReported(float time)
-    {
-        CurrentTimeReported?.Invoke(time);
-    }
     
-    protected virtual void OnGoalTimeReached(int time)
-    {
-        GoalTimeReached?.Invoke(time);
+        while (_currentTime > 0f)
+        {
+            if (_timerStopped)
+                yield return new WaitUntil(() => !_timerStopped);
+        
+            _currentTime -= Time.deltaTime;
+            _currentSecond = Mathf.CeilToInt(_currentTime);
+        
+            if (_currentSecond < _lastSecond)
+            {
+                _lastSecond = _currentSecond;
+                OnCurrentTimeReported(_currentSecond);
+                yield return null;
+            }
+            yield return null;
+        }
+    
+        OnGoalTimeReached(Mathf.CeilToInt(base._currentTime));
+        Reset();
     }
-}
 
-public interface ITimerInstance
-{
-    public ITimerInstance ThisTimer { get; }
+    public override void Reset()
+    {
+        _currentTime = _goalTime;
+        _timerStopped = true;
+    }
 }

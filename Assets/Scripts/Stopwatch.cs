@@ -1,9 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
-public class SimpleTimer : Timer
+public class Stopwatch : TimeCounter
 {
-    public SimpleTimer(float goalTime) : base(goalTime)
+    public Stopwatch(TimeView view) : base(view)
     {
     }
 
