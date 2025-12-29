@@ -20,7 +20,7 @@ public class Stopwatch : TimeCounter
             yield return null;
         }
 
-        _currentTime = _goalTime;
+        //_currentTime = _goalTime;
         OnGoalTimeReached(Mathf.FloorToInt(_currentTime));
         Reset();
     }

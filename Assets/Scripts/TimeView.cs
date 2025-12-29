@@ -18,10 +18,10 @@ public abstract class TimeView : MonoBehaviour
     [SerializeField] protected float _goalTime;
     [SerializeField] protected Button _startButton;
     [SerializeField] protected Button _resetButton;
-    [SerializeField] protected Button _stoptButton;
+    [SerializeField] protected Button _stopButton;
     [SerializeField] protected Button _resumeButton;
-    
-    protected Coroutine _routine;
+
+    private Coroutine _routine;
     protected TimeCounter _timeCounter;
     
     protected virtual void OnEnable()
@@ -42,45 +42,58 @@ public abstract class TimeView : MonoBehaviour
     }
     
     protected abstract void OnTimeChanged(float time);
+    protected abstract void ResetThisView();
+    
+    protected virtual void RunTimeCounter()
+    {
+        if (_routine != null) return;
 
-    protected void OnGoalTimeReached(float time)
+        _routine = StartCoroutine(_timeCounter.Start());
+    }
+
+    private void OnGoalTimeReached(float time)
     {
         ResetView();
     }
-    
-    protected void OnRunPressed()
+
+    private void OnRunPressed()
     {
        RunButtonPressed?.Invoke();
     }
-    protected void OnStopPressed()
+
+    private void OnStopPressed()
     {
        StopButtonPressed?.Invoke();
     }
-    protected void OnResumePressed()
+
+    private void OnResumePressed()
     {
         ResumeButtonPressed?.Invoke();
     }
-    protected void OnResetPressed()
+
+    private void OnResetPressed()
     {
         ResetButtonPressed?.Invoke();
     }
-    protected void SubscribeButtons()
+
+    private void SubscribeButtons()
     {
     _startButton.onClick.AddListener(OnRunPressed);
     _resetButton.onClick.AddListener(OnResetPressed);
     _resumeButton.onClick.AddListener(OnResumePressed);
-    _stoptButton.onClick.AddListener(OnStopPressed);
+    _stopButton.onClick.AddListener(OnStopPressed);
     
     }
-    protected void UnsubscribeButtons()
+
+    private void UnsubscribeButtons()
     {
         _startButton.onClick.RemoveListener(OnRunPressed);
         _resetButton.onClick.RemoveListener(OnResetPressed);
         _resumeButton.onClick.RemoveListener(OnResumePressed);
-        _stoptButton.onClick.RemoveListener(OnStopPressed);
+        _stopButton.onClick.RemoveListener(OnStopPressed);
     }
-    
-    protected void SubscribeTimeCounter()
+
+    private void SubscribeTimeCounter()
     {
         _timeCounter.CurrentTimeReported += OnTimeChanged;
         _timeCounter.GoalTimeReached += OnGoalTimeReached;
@@ -90,7 +103,7 @@ public abstract class TimeView : MonoBehaviour
         ResetButtonPressed += ResetView;
     }
 
-    protected void UnsubscribeTimeCounter()
+    private void UnsubscribeTimeCounter()
     {
         _timeCounter.CurrentTimeReported -= OnTimeChanged;
         _timeCounter.GoalTimeReached -= OnGoalTimeReached;
@@ -100,17 +113,12 @@ public abstract class TimeView : MonoBehaviour
         ResetButtonPressed -= _timeCounter.Reset;
     }
     
-    protected virtual void RunTimeCounter()
-    {
-        if (_routine != null) return;
-
-        _routine = StartCoroutine(_timeCounter.Start());
-    }
-    
-    protected virtual void ResetView()
+    private void ResetView()
     {
         if (_routine != null) StopCoroutine(_routine);
 
         _routine = null;
+        ResetThisView();
+        _timeCounter.Reset();
     }
 }

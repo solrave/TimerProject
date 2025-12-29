@@ -20,9 +20,8 @@ public class TimerView : TimeView
        Destroy(_images.Dequeue().gameObject);
     }
     
-    protected override void ResetView()
+    protected override void ResetThisView()
     {
-        base.ResetView();
         ClearImages();
         Debug.Log($"Timer finished at {_timeCounter.CurrentTime} !");
     }

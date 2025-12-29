@@ -21,9 +21,8 @@ public class StopwatchView : TimeView
         _timeDisplay.text = time.ToString();
     }
 
-    protected override void ResetView()
+    protected override void ResetThisView()
     {
-        base.ResetView();
         _timeProgress.value = 0f;
         _timeDisplay.text = "0";
         Debug.Log($"Stopwatch finished at {_timeCounter.CurrentTime} !");
