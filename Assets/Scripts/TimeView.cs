@@ -41,10 +41,13 @@ public abstract class TimeView : MonoBehaviour
         _timeCounter = timeCounter;
     }
     
-  
-
     protected abstract void OnTimeChanged(float time);
-    protected abstract void OnGoalTimeReached(float time);
+
+    protected void OnGoalTimeReached(float time)
+    {
+        ResetView();
+    }
+    
     protected void OnRunPressed()
     {
        RunButtonPressed?.Invoke();
@@ -84,7 +87,7 @@ public abstract class TimeView : MonoBehaviour
         RunButtonPressed += RunTimeCounter;
         StopButtonPressed += _timeCounter.Stop;
         ResumeButtonPressed += _timeCounter.Resume;
-        ResetButtonPressed += ResetTimeCounter;
+        ResetButtonPressed += ResetView;
     }
 
     protected void UnsubscribeTimeCounter()
@@ -97,36 +100,17 @@ public abstract class TimeView : MonoBehaviour
         ResetButtonPressed -= _timeCounter.Reset;
     }
     
-    protected void RunTimeCounter()
+    protected virtual void RunTimeCounter()
     {
         if (_routine != null) return;
 
         _routine = StartCoroutine(_timeCounter.Start());
     }
     
-    protected virtual void ResetTimeCounter()
+    protected virtual void ResetView()
     {
         if (_routine != null) StopCoroutine(_routine);
 
         _routine = null;
     }
 }
-
-// {
-//     if (_straightTimerRoutine != null)
-//     {
-//         StopCoroutine(_straightTimerRoutine);
-//         _straightTimerRoutine = null;
-//         Debug.Log($"Straight Timer Stopped at time {time}");
-//         Reset();
-//     }
-// }
-
-// protected abstract void OnCountdownTimeReported(float time);
-// {
-//     if (_visualisedSeconds != null && _visualisedSeconds.Count > time)
-//     {
-//         var currentSecond = _visualisedSeconds.Dequeue();
-//         Destroy(currentSecond.gameObject);
-//     }
-// }

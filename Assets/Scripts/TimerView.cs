@@ -1,31 +1,48 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class TimerView : TimeView
 {
     [SerializeField] private RectTransform _timeProgressView;
-    [SerializeField] private Image _secondVisualPrefab;
-    private Queue<Image> _visualisedSeconds = new();
+    [SerializeField] private Image _imagePrefab;
+    private Queue<Image> _images = new();
 
+    protected override void RunTimeCounter()
+    {
+        base.RunTimeCounter();
+        InstantiateImages();
+    }
+    
     protected override void OnTimeChanged(float time)
     {
-       
+       Destroy(_images.Dequeue().gameObject);
+    }
+    
+    protected override void ResetView()
+    {
+        base.ResetView();
+        ClearImages();
+        Debug.Log($"Timer finished at {_timeCounter.CurrentTime} !");
     }
 
-    protected override void OnGoalTimeReached(float time)
+    private void InstantiateImages()
     {
-        
-    }
-
-
-    private void ClearSecondsVisualizationList()
-    {
-        foreach (Image second in _visualisedSeconds)
+        for (int i = 0; i < _goalTime; i++)
         {
-            Destroy(second.gameObject);
+            var image = Instantiate(_imagePrefab, _timeProgressView);
+            _images.Enqueue(image);
+        }
+    }
+
+    private void ClearImages()
+    {
+        foreach (Image image in _images)
+        {
+            Destroy(image.gameObject);
         }
 
-        _visualisedSeconds.Clear();
+        _images.Clear();
     }
 }

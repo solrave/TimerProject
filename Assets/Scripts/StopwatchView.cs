@@ -21,15 +21,11 @@ public class StopwatchView : TimeView
         _timeDisplay.text = time.ToString();
     }
 
-    protected override void OnGoalTimeReached(float time)
+    protected override void ResetView()
     {
-        Debug.Log($"Stopwatch finished at {time} !");
-    }
-
-    protected override void ResetTimeCounter()
-    {
-        base.ResetTimeCounter();
+        base.ResetView();
         _timeProgress.value = 0f;
         _timeDisplay.text = "0";
+        Debug.Log($"Stopwatch finished at {_timeCounter.CurrentTime} !");
     }
 }
