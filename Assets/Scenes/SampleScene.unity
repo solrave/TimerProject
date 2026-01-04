@@ -1959,7 +1959,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 645291e2b7894542b6268e2b82acdcc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _goalTime: 7
+  _goalTime: 3
   _startButton: {fileID: 1621553807}
   _resetButton: {fileID: 1324101367}
   _stopButton: {fileID: 1174575462}
