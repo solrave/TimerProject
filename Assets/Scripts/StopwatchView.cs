@@ -9,9 +9,9 @@ public class StopwatchView : TimeView
     [SerializeField] private Slider _timeProgress;
     [SerializeField] private TMP_Text _timeDisplay;
 
-    protected override void OnEnable()
+    protected override void Start()
     {
-        base.OnEnable();
+        base.Start();
         _timeProgress.maxValue = _goalTime;
     }
     

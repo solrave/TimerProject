@@ -3,11 +3,12 @@ using UnityEngine;
 
 public class Timer : TimeCounter
 {
-    private float _currentSecond;
-    private float _lastSecond;
+    private int _currentSecond;
+    private int _lastSecond;
     public Timer(TimeView view) : base(view)
     {
         _currentTime = _goalTime;
+        _lastSecond = Mathf.RoundToInt(_goalTime);
     }
 
     public override IEnumerator Start()
@@ -31,7 +32,7 @@ public class Timer : TimeCounter
             yield return null;
         }
     
-        OnGoalTimeReached(Mathf.CeilToInt(base._currentTime));
+        OnGoalTimeReached(Mathf.CeilToInt(_currentTime));
         Reset();
     }
 

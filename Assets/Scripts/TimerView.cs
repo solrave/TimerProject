@@ -11,8 +11,9 @@ public class TimerView : TimeView
 
     protected override void RunTimeCounter()
     {
-        base.RunTimeCounter();
+        if (_routine != null) return;
         InstantiateImages();
+        base.RunTimeCounter();
     }
     
     protected override void OnTimeChanged(float time)

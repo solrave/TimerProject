@@ -21,10 +21,10 @@ public abstract class TimeView : MonoBehaviour
     [SerializeField] protected Button _stopButton;
     [SerializeField] protected Button _resumeButton;
 
-    private Coroutine _routine;
+    protected Coroutine _routine;
     protected TimeCounter _timeCounter;
     
-    protected virtual void OnEnable()
+    protected virtual void Start()
     {
         SubscribeButtons();
         SubscribeTimeCounter();
