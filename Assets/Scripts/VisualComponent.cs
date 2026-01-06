@@ -2,11 +2,11 @@ using UnityEngine;
 
 public abstract class VisualComponent : MonoBehaviour
 {
-    protected float _goalTime;
+    protected Timer _timer;
 
-    public virtual void InitVisual(float time)
+    public virtual void InitVisual(Timer timer)
     {
-        _goalTime = time;
+        _timer = timer;
     }
     public abstract void UpdateVisual(float time);
     public abstract void ResetVisual();

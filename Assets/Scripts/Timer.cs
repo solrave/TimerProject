@@ -4,14 +4,18 @@ using UnityEngine;
 
 public class Timer
 {
-    public event Action<float> CurrentTimeReported;
+    public event Action<float> CurrentTimeUpdated;
+    public event Action<int> CurrentSecondUpdated;
+    public event Action TimerStarted;
     public event Action<float> GoalTimeReached;
     public float CurrentTime => _currentTime;
+    public float GoalTime => _goalTime;
 
-    protected float _goalTime;
-    protected float _currentTime = 0f;
-    
-    protected bool _timerStopped;
+    private float _goalTime;
+    private float _currentTime = 0f;
+
+    private bool _timerStopped;
+    private int _currentSecond;
 
     public Timer(float goalTime)
     {
@@ -20,6 +24,7 @@ public class Timer
 
     public  IEnumerator Start()
     {
+        TimerStarted?.Invoke();
         _timerStopped = false;
         while (_currentTime < _goalTime)
         {
@@ -27,7 +32,12 @@ public class Timer
                 yield return new WaitUntil(() => !_timerStopped);
             
             _currentTime += Time.deltaTime;
-            CurrentTimeReported?.Invoke(_currentTime);
+            CurrentTimeUpdated?.Invoke(_currentTime);
+            if ((int)_currentTime > _currentSecond)
+            {
+                _currentSecond = (int)_currentTime;
+                CurrentSecondUpdated?.Invoke(_currentSecond);
+            }
             yield return null;
         }
         GoalTimeReached?.Invoke(_currentTime);
@@ -37,6 +47,7 @@ public class Timer
     public  void Reset()
      {
          _currentTime = 0f;
+         _currentSecond = 0;
          _timerStopped = true;
      }
 

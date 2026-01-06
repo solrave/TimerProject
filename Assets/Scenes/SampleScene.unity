@@ -1103,10 +1103,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _forwardTimePrefab: {fileID: 8715431318047484316, guid: 588ad5f4aad10839abb56a3d2057c87e, type: 3}
-  _countdownTimePrefab: {fileID: 0}
+  _countdownTimePrefab: {fileID: 6148269465376587124, guid: 5af76169e6114b80da67d538d885e91f, type: 3}
   _visualHolder: {fileID: 855810093}
   _goalTime: 5
-  _countdownTimer: 0
+  _countdownTimer: 1
   _startButton: {fileID: 1621553807}
   _resetButton: {fileID: 1324101367}
   _stopButton: {fileID: 1174575462}

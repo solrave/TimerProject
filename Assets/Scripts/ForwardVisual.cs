@@ -1,17 +1,25 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ForwardTimeVisual : VisualComponent
+public class ForwardVisual : VisualComponent
 {
 
     [SerializeField] private Slider _slider;
     [SerializeField] private TMP_Text _text;
-    public override void InitVisual(float time)
+
+    private void OnDestroy()
     {
-        base.InitVisual(time);
-        _slider.maxValue = _goalTime;
+        _timer.CurrentTimeUpdated -= UpdateVisual;
+    }
+
+    public override void InitVisual(Timer timer)
+    {
+        base.InitVisual(timer);
+        _slider.maxValue = _timer.GoalTime;
         _text.text = "0";
+        _timer.CurrentTimeUpdated += UpdateVisual;
     }
 
     public override void UpdateVisual(float time)

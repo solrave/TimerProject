@@ -30,7 +30,7 @@ public class Controller : MonoBehaviour
 
     private Coroutine _routine;
     private Timer _timer;
-    private TimeProcessor _processor;
+   
     private VisualComponent _currentVisual;
     
     protected void OnDisable()
@@ -46,15 +46,15 @@ public class Controller : MonoBehaviour
         if (_countdownTimer)
         {
             _currentVisual = GameObject.Instantiate(_countdownTimePrefab, _visualHolder).GetComponent<VisualComponent>();
-            _processor = new CountdownTimeProcessor(_currentVisual);
+            
         }
         else
         {
             _currentVisual = GameObject.Instantiate(_forwardTimePrefab, _visualHolder).GetComponent<VisualComponent>();
-            _processor = new ForwardTimeProcessor(_currentVisual);
+            
         }
 
-        if (_currentVisual is not null) _currentVisual.InitVisual(_goalTime);
+        if (_currentVisual is not null) _currentVisual.InitVisual(_timer);
         
         SubscribeButtons();
         SubscribeTimeCounter();
@@ -62,7 +62,7 @@ public class Controller : MonoBehaviour
 
     private void OnTimeChanged(float time)
     {
-        _processor.ProcessTime(time);
+        
     }
     
     private void OnGoalTimeReached(float time)
@@ -124,7 +124,7 @@ public class Controller : MonoBehaviour
 
     private void SubscribeTimeCounter()
     {
-        _timer.CurrentTimeReported += OnTimeChanged;
+        _timer.CurrentTimeUpdated += OnTimeChanged;
         _timer.GoalTimeReached += OnGoalTimeReached;
         RunButtonPressed += RunTimer;
         StopButtonPressed += _timer.Stop;
@@ -135,7 +135,7 @@ public class Controller : MonoBehaviour
 
     private void UnsubscribeTimeCounter()
     {
-        _timer.CurrentTimeReported -= OnTimeChanged;
+        _timer.CurrentTimeUpdated -= OnTimeChanged;
         _timer.GoalTimeReached -= OnGoalTimeReached;
         RunButtonPressed -= RunTimer;
         StopButtonPressed -= _timer.Stop;
