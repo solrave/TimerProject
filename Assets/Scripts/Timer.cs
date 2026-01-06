@@ -1,44 +1,52 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
-public class Timer : TimeCounter
+public class Timer
 {
-    private int _currentSecond;
-    private int _lastSecond;
-    public Timer(TimeView view) : base(view)
+    public event Action<float> CurrentTimeReported;
+    public event Action<float> GoalTimeReached;
+    public float CurrentTime => _currentTime;
+
+    protected float _goalTime;
+    protected float _currentTime = 0f;
+    
+    protected bool _timerStopped;
+
+    public Timer(float goalTime)
     {
-        _currentTime = _goalTime;
-        _lastSecond = Mathf.RoundToInt(_goalTime);
+        _goalTime = goalTime;
     }
 
-    public override IEnumerator Start()
+    public  IEnumerator Start()
     {
         _timerStopped = false;
-    
-        while (_currentTime > 0f)
+        while (_currentTime < _goalTime)
         {
             if (_timerStopped)
                 yield return new WaitUntil(() => !_timerStopped);
-        
-            _currentTime -= Time.deltaTime;
-            _currentSecond = Mathf.CeilToInt(_currentTime);
-        
-            if (_currentSecond < _lastSecond)
-            {
-                _lastSecond = _currentSecond;
-                OnCurrentTimeReported(_currentSecond);
-                yield return null;
-            }
+            
+            _currentTime += Time.deltaTime;
+            CurrentTimeReported?.Invoke(_currentTime);
             yield return null;
         }
-    
-        OnGoalTimeReached(Mathf.CeilToInt(_currentTime));
+        GoalTimeReached?.Invoke(_currentTime);
         Reset();
     }
 
-    public override void Reset()
+    public  void Reset()
+     {
+         _currentTime = 0f;
+         _timerStopped = true;
+     }
+
+    public void Stop()
     {
-        _currentTime = _goalTime;
         _timerStopped = true;
+    }
+
+    public void Resume()
+    {
+        _timerStopped = false;
     }
 }
