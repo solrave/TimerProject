@@ -1106,7 +1106,7 @@ MonoBehaviour:
   _countdownTimePrefab: {fileID: 6148269465376587124, guid: 5af76169e6114b80da67d538d885e91f, type: 3}
   _visualHolder: {fileID: 855810093}
   _goalTime: 5
-  _countdownTimer: 1
+  _countdownTimer: 0
   _startButton: {fileID: 1621553807}
   _resetButton: {fileID: 1324101367}
   _stopButton: {fileID: 1174575462}
